@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Koleksi Kota Lokasi Proyek
+    match /dbcities/{cityId} {
+      allow read, write: if true;
+    }
+    match /cities/{cityId} {
+      allow read, write: if true;
+    }
+
+    // Koleksi Properti Proyek
+    match /dbproperti/{propertyId} {
+      allow read, write: if true;
+      match /{allSubcollections=**} {
+        allow read, write: if true;
+      }
+    }
+    match /projects/{projectId} {
+      allow read, write: if true;
+    }
+
+    // Koleksi Dokumentasi Proyek
+    match /dbdocumentation/{docId} {
+      allow read, write: if true;
+    }
+    match /documentation/{docId} {
+      allow read, write: if true;
+    }
+
+    // Koleksi Formulir Kontak & Booking Survey
+    match /inquiries/{inquiryId} {
+      allow read, write: if true;
+    }
+
+    // Koleksi Pengaturan Situs
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+
+    // Aturan Umum Fallback
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}

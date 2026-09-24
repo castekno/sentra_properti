@@ -1,0 +1,12 @@
+{
+  "projectId": "sentrapropertidb",
+  "appId": "1:300320734132:web:7a505d754547c752c3dc62",
+  "apiKey": "AIzaSyCoCWtU9R2PE51C3-Mi6DAOUrO9xLR_Yck",
+  "authDomain": "sentrapropertidb.firebaseapp.com",
+  "firestoreDatabaseId": "spdb",
+  "storageBucket": "sentrapropertidb.firebasestorage.app",
+  "messagingSenderId": "300320734132",
+  "measurementId": "",
+  "oAuthClientId": "",
+  "recaptchaSiteKey": ""
+}

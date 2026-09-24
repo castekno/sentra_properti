@@ -1,0 +1,6 @@
+{
+  "name": "Sentra Properti - Solusi Properti Terpercaya",
+  "description": "Platform resmi Sentra Properti untuk penjualan dan informasi proyek perumahan terpercaya di berbagai kota Indonesia lengkap dengan detail spesifikasi, peta lokasi, galeri, dan konsultasi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

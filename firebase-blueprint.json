@@ -1,0 +1,158 @@
+{
+  "entities": {
+    "City": {
+      "title": "City",
+      "description": "Lokasi kota dan wilayah proyek perumahan Sentra Properti",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID unik kota"
+        },
+        "name": {
+          "type": "string",
+          "description": "Nama kota (e.g. Palembang Kota, Banyuasin)"
+        },
+        "province": {
+          "type": "string",
+          "description": "Provinsi lokasi kota"
+        },
+        "slug": {
+          "type": "string",
+          "description": "Slug URL kota"
+        },
+        "coverImage": {
+          "type": "string",
+          "description": "Gambar utama kota"
+        },
+        "description": {
+          "type": "string",
+          "description": "Deskripsi potensi lokasi kota"
+        }
+      },
+      "required": ["id", "name"]
+    },
+    "PropertyProject": {
+      "title": "PropertyProject",
+      "description": "Data proyek perumahan Sentra Properti",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID unik proyek perumahan"
+        },
+        "name": {
+          "type": "string",
+          "description": "Nama proyek perumahan"
+        },
+        "cityId": {
+          "type": "string",
+          "description": "ID kota lokasi perumahan"
+        },
+        "price": {
+          "type": "number",
+          "description": "Harga rumah dalam rupiah"
+        },
+        "address": {
+          "type": "string",
+          "description": "Alamat lengkap lokasi proyek"
+        },
+        "bedrooms": {
+          "type": "number",
+          "description": "Jumlah kamar tidur"
+        },
+        "bathrooms": {
+          "type": "number",
+          "description": "Jumlah kamar mandi"
+        },
+        "carports": {
+          "type": "number",
+          "description": "Kapasitas carport kendaraan"
+        },
+        "buildingArea": {
+          "type": "number",
+          "description": "Luas bangunan m2"
+        },
+        "landArea": {
+          "type": "number",
+          "description": "Luas tanah m2"
+        },
+        "floors": {
+          "type": "number",
+          "description": "Jumlah lantai bangunan"
+        },
+        "electricity": {
+          "type": "string",
+          "description": "Daya listrik VA"
+        },
+        "waterSource": {
+          "type": "string",
+          "description": "Sumber air (PDAM/Sumur)"
+        },
+        "certificate": {
+          "type": "string",
+          "description": "Legalitas sertifikat kepemilikan"
+        },
+        "photos": {
+          "type": "array",
+          "description": "Galeri foto proyek perumahan"
+        },
+        "facilities": {
+          "type": "array",
+          "description": "Fasilitas kawasan perumahan"
+        },
+        "strategicPoints": {
+          "type": "array",
+          "description": "Poin keunggulan strategis lokasi"
+        }
+      },
+      "required": ["id", "name", "price"]
+    },
+    "DocumentationItem": {
+      "title": "DocumentationItem",
+      "description": "Galeri dokumentasi serah terima kunci dan kegiatan Sentra Properti",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID unik dokumentasi"
+        },
+        "title": {
+          "type": "string",
+          "description": "Judul kegiatan dokumentasi"
+        },
+        "category": {
+          "type": "string",
+          "description": "Kategori dokumentasi (e.g. Lainnya, Site Visit Proyek, Serah Terima Kunci)"
+        },
+        "date": {
+          "type": "string",
+          "description": "Tanggal pelaksanaan kegiatan"
+        },
+        "caption": {
+          "type": "string",
+          "description": "Keterangan dokumentasi"
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "Foto dokumentasi"
+        }
+      },
+      "required": ["id", "title"]
+    }
+  },
+  "firestore": {
+    "/dbcities/{cityId}": {
+      "schema": "City",
+      "description": "Koleksi data kota lokasi proyek perumahan"
+    },
+    "/dbproperti/{propertyId}": {
+      "schema": "PropertyProject",
+      "description": "Koleksi data proyek perumahan"
+    },
+    "/dbdocumentation/{docId}": {
+      "schema": "DocumentationItem",
+      "description": "Koleksi data galeri dokumentasi kegiatan proyek"
+    }
+  }
+}
