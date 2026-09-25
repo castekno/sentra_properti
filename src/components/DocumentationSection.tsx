@@ -95,7 +95,7 @@ export const DocumentationSection: React.FC<DocumentationSectionProps> = ({
         {filteredItems.length === 0 ? (
           <div className="bg-white rounded-3xl p-10 text-center border border-dashed border-slate-300 space-y-3">
             <ImageIcon className="w-10 h-10 text-slate-300 mx-auto" />
-            <p className="text-slate-600 font-semibold text-sm">Belum ada foto dokumentasi di database Firebase Firestore.</p>
+            <p className="text-slate-600 font-semibold text-sm">Belum ada foto dokumentasi di database.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
