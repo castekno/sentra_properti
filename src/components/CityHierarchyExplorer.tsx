@@ -37,6 +37,7 @@ interface CityHierarchyExplorerProps {
   onClearSearch?: () => void;
   onSelectCity: (cityId: string | null) => void;
   onOpenProjectDetail: (project: Project) => void;
+  isDbError?: boolean;
 }
 
 export const CityHierarchyExplorer: React.FC<CityHierarchyExplorerProps> = ({
@@ -48,6 +49,7 @@ export const CityHierarchyExplorer: React.FC<CityHierarchyExplorerProps> = ({
   onClearSearch,
   onSelectCity,
   onOpenProjectDetail,
+  isDbError = false,
 }) => {
   // Local project filter states
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua Kategori');
@@ -222,7 +224,9 @@ export const CityHierarchyExplorer: React.FC<CityHierarchyExplorerProps> = ({
           {cities.length === 0 ? (
             <div className="bg-slate-50 border border-dashed border-slate-300 rounded-3xl p-10 text-center space-y-3">
               <Building2 className="w-12 h-12 text-slate-400 mx-auto" />
-              <p className="text-slate-600 font-semibold text-sm">Belum ada data kota lokasi properti di database Firebase Firestore.</p>
+              <p className="text-slate-600 font-semibold text-sm">
+                {isDbError ? 'Terjadi Gangguan pada koneksi database' : 'Belum ada data kota lokasi properti di database.'}
+              </p>
             </div>
           ) : (
             <>
@@ -450,10 +454,16 @@ export const CityHierarchyExplorer: React.FC<CityHierarchyExplorerProps> = ({
           {filteredProjects.length === 0 ? (
             <div className="text-center py-16 bg-slate-50 rounded-3xl border border-dashed border-slate-300 p-8 space-y-4">
               <Building2 className="w-12 h-12 text-slate-400 mx-auto" />
-              <h3 className="text-lg font-bold text-slate-700">Belum Ada Proyek Sesuai Pencarian</h3>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
-                Silakan ganti kata kunci pencarian atau pilih kota lain untuk melihat proyek yang tersedia.
-              </p>
+              {isDbError && projects.length === 0 ? (
+                <p className="text-slate-600 font-semibold text-sm">Terjadi Gangguan pada koneksi database</p>
+              ) : (
+                <>
+                  <h3 className="text-lg font-bold text-slate-700">Belum Ada Proyek Sesuai Pencarian</h3>
+                  <p className="text-xs text-slate-500 max-w-md mx-auto">
+                    Silakan ganti kata kunci pencarian atau pilih kota lain untuk melihat proyek yang tersedia.
+                  </p>
+                </>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

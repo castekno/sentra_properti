@@ -36,6 +36,7 @@ export default function App() {
   // Firestore DB connection and quota states
   const [isDbConnected, setIsDbConnected] = useState<boolean>(false);
   const [isQuotaExceeded, setIsQuotaExceeded] = useState<boolean>(false);
+  const [hasDbError, setHasDbError] = useState<boolean>(false);
 
   // Selected City Filter & Navigation
   const [selectedCityId, setSelectedCityId] = useState<string | null>(null);
@@ -63,6 +64,7 @@ export default function App() {
 
         if (isMounted) {
           setIsQuotaExceeded(dbStatus.isQuotaExceeded);
+          setHasDbError(dbStatus.hasError || dbStatus.isQuotaExceeded || !dbStatus.isConnected);
           // Hanya aktif jika terhubung ke database tanpa error/kuota habis dan memiliki data proyek nyata
           const isRealDbAvailable = dbStatus.isConnected && !dbStatus.isQuotaExceeded && Boolean(pList && pList.length > 0);
           setIsDbConnected(isRealDbAvailable);
@@ -74,6 +76,9 @@ export default function App() {
         }
       } catch (err) {
         console.warn('Data loading error from Firebase Firestore:', err);
+        if (isMounted) {
+          setHasDbError(true);
+        }
       } finally {
         if (isMounted) {
           setIsLoading(false);
@@ -86,6 +91,9 @@ export default function App() {
       isMounted = false;
     };
   }, []);
+
+  // Indikator gangguan database (offline, kuota habis, atau koneksi gagal)
+  const isDbError = isQuotaExceeded || hasDbError || !isDbConnected;
 
   // Navigation Smooth Scroll
   const handleNavigate = (sectionId: string) => {
@@ -137,6 +145,7 @@ export default function App() {
           onClearSearch={() => setSearchQuery('')}
           onSelectCity={(cId) => setSelectedCityId(cId)}
           onOpenProjectDetail={(project) => setActiveDetailProject(project)}
+          isDbError={isDbError}
         />
 
         {/* 4. Keunggulan & Trust Factors */}
@@ -145,6 +154,7 @@ export default function App() {
         {/* 5. Dokumentasi & Serah Terima */}
         <DocumentationSection
           items={docs}
+          isDbError={isDbError}
         />
 
         {/* 6. Hubungi Kami & Booking Survey */}
