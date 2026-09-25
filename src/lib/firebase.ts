@@ -35,15 +35,51 @@ export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getA
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "spdb");
 const primaryDb = db;
 
+// Status koneksi Firestore & kuota pembacaan
+let firestoreQuotaExceeded = false;
+let firestoreConnectionError = false;
+let firestoreConnected = false;
+
+export function recordFirestoreError(err: any): void {
+  firestoreConnected = false;
+  firestoreConnectionError = true;
+  const msg = (err?.message || String(err)).toLowerCase();
+  const code = err?.code || '';
+  if (msg.includes('quota') || code === 'resource-exhausted') {
+    firestoreQuotaExceeded = true;
+    console.warn('Firestore Quota Exceeded (Free daily read units reached limit):', err);
+  } else {
+    console.warn('Firestore Connection Error atau offline:', err);
+  }
+}
+
+export function recordFirestoreSuccess(): void {
+  firestoreConnected = true;
+  firestoreConnectionError = false;
+  firestoreQuotaExceeded = false;
+}
+
+export function getFirestoreConnectionStatus() {
+  return {
+    isConnected: firestoreConnected && !firestoreConnectionError && !firestoreQuotaExceeded,
+    isQuotaExceeded: firestoreQuotaExceeded,
+    hasError: firestoreConnectionError,
+  };
+}
+
 // Helper eksekusi database menggunakan instance Firestore target "spdb"
 async function executeWithDb<T>(action: (targetDb: Firestore) => Promise<T>): Promise<T | null> {
+  if (firestoreQuotaExceeded) {
+    return null;
+  }
   try {
     const res = await action(db);
     if (res !== null && res !== undefined) {
+      recordFirestoreSuccess();
       return res;
     }
   } catch (err) {
-    console.warn('Query ke database Firestore spdb gagal atau offline:', err);
+    recordFirestoreError(err);
   }
   return null;
 }
@@ -159,6 +195,7 @@ export async function fetchCities(): Promise<City[]> {
         }
       }
     } catch (e) {
+      recordFirestoreError(e);
       console.warn('Fetch dbcities collection failed:', e);
     }
 
@@ -214,7 +251,11 @@ export async function fetchCities(): Promise<City[]> {
   }
 
   const localCities = getLocal<City[]>(STORAGE_KEYS.CITIES, []);
-  return localCities.length > 0 ? localCities : INITIAL_CITIES;
+  const finalCities = localCities.length > 0 ? localCities : INITIAL_CITIES;
+  if (localCities.length === 0 && INITIAL_CITIES.length > 0) {
+    setLocal(STORAGE_KEYS.CITIES, INITIAL_CITIES);
+  }
+  return finalCities;
 }
 
 export async function addCity(city: Omit<City, 'id'> & { id?: string }): Promise<City> {
@@ -482,6 +523,7 @@ export async function fetchProjects(): Promise<Project[]> {
         }
       }
     } catch (e) {
+      recordFirestoreError(e);
       console.warn('Fetch dbproperti collection failed:', e);
     }
 
@@ -521,6 +563,9 @@ export async function fetchProjects(): Promise<Project[]> {
 
   const cached = getLocal<Project[]>(STORAGE_KEYS.PROJECTS, []);
   const projList = cached.length > 0 ? cached : INITIAL_PROJECTS;
+  if (cached.length === 0 && INITIAL_PROJECTS.length > 0) {
+    setLocal(STORAGE_KEYS.PROJECTS, INITIAL_PROJECTS);
+  }
   return projList.map((p, idx) => normalizeProjectData(p, idx));
 }
 
@@ -693,6 +738,7 @@ export async function fetchDocumentation(): Promise<DocumentationItem[]> {
         return docs;
       }
     } catch (e) {
+      recordFirestoreError(e);
       console.warn('Fetch dbdocumentation collection failed:', e);
     }
 
@@ -748,7 +794,11 @@ export async function fetchDocumentation(): Promise<DocumentationItem[]> {
   }
 
   const localDocs = getLocal<DocumentationItem[]>(STORAGE_KEYS.DOCS, []);
-  return localDocs.length > 0 ? localDocs : INITIAL_DOCUMENTATION;
+  const finalDocs = localDocs.length > 0 ? localDocs : INITIAL_DOCUMENTATION;
+  if (localDocs.length === 0 && INITIAL_DOCUMENTATION.length > 0) {
+    setLocal(STORAGE_KEYS.DOCS, INITIAL_DOCUMENTATION);
+  }
+  return finalDocs;
 }
 
 export async function addDocumentation(docItem: Omit<DocumentationItem, 'id'> & { id?: string }): Promise<DocumentationItem> {

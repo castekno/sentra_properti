@@ -15,7 +15,8 @@ import {
   fetchCities, 
   fetchProjects, 
   fetchDocumentation, 
-  fetchSiteSettings
+  fetchSiteSettings,
+  getFirestoreConnectionStatus
 } from './lib/firebase';
 import { 
   INITIAL_CITIES, 
@@ -31,6 +32,10 @@ export default function App() {
   const [docs, setDocs] = useState<DocumentationItem[]>(INITIAL_DOCUMENTATION);
   const [settings, setSettings] = useState<SiteSettings>(INITIAL_SETTINGS);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // Firestore DB connection and quota states
+  const [isDbConnected, setIsDbConnected] = useState<boolean>(false);
+  const [isQuotaExceeded, setIsQuotaExceeded] = useState<boolean>(false);
 
   // Selected City Filter & Navigation
   const [selectedCityId, setSelectedCityId] = useState<string | null>(null);
@@ -54,7 +59,14 @@ export default function App() {
           fetchSiteSettings(),
         ]);
 
+        const dbStatus = getFirestoreConnectionStatus();
+
         if (isMounted) {
+          setIsQuotaExceeded(dbStatus.isQuotaExceeded);
+          // Hanya aktif jika terhubung ke database tanpa error/kuota habis dan memiliki data proyek nyata
+          const isRealDbAvailable = dbStatus.isConnected && !dbStatus.isQuotaExceeded && Boolean(pList && pList.length > 0);
+          setIsDbConnected(isRealDbAvailable);
+
           if (cList && cList.length > 0) setCities(cList);
           if (pList && pList.length > 0) setProjects(pList);
           if (dList && dList.length > 0) setDocs(dList);
@@ -161,6 +173,8 @@ export default function App() {
       {/* 8.1. Live Activity Popups / Toast Notification (Mobile & Desktop) */}
       <LiveActivityToast
         projects={projects}
+        isDbConnected={isDbConnected}
+        isQuotaExceeded={isQuotaExceeded}
         onSelectProject={(proj) => setActiveDetailProject(proj)}
         onOpenConsultation={() => handleNavigate('hubungi-kami')}
       />

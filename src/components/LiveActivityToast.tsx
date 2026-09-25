@@ -6,6 +6,8 @@ interface LiveActivityToastProps {
   projects: Project[];
   onSelectProject?: (project: Project) => void;
   onOpenConsultation?: () => void;
+  isDbConnected?: boolean;
+  isQuotaExceeded?: boolean;
 }
 
 // Koleksi 60+ Nama-nama Khas Indonesia dengan sensor suku kata privasi
@@ -115,10 +117,15 @@ export const LiveActivityToast: React.FC<LiveActivityToastProps> = ({
   projects,
   onSelectProject,
   onOpenConsultation,
+  isDbConnected = false,
+  isQuotaExceeded = false,
 }) => {
   const [currentToast, setCurrentToast] = useState<ToastData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissedPermanently] = useState(false);
+
+  // Notifikasi HANYA diizinkan jika koneksi database aktif, kuota tidak habis, dan ada proyek nyata dari database
+  const isEnabled = Boolean(isDbConnected) && !isQuotaExceeded && Array.isArray(projects) && projects.length > 0;
 
   // Deck nama yang di-shuffle agar nama tidak berulang selama sesi berlangsung
   const nameDeckRef = useRef<string[]>([]);
@@ -133,8 +140,8 @@ export const LiveActivityToast: React.FC<LiveActivityToastProps> = ({
     return nameDeckRef.current.pop() || 'Calon Pembeli';
   }, []);
 
-  // Ambil nama proyek dari database secara akurat
-  const getRandomProject = useCallback((): { name: string; project?: Project } => {
+  // Ambil nama proyek dari database secara akurat tanpa dummy fallback
+  const getRandomProject = useCallback((): { name: string; project?: Project } | null => {
     if (projects && projects.length > 0) {
       const valid = projects.filter((p) => ((p.name || (p as any).title) ?? '').trim().length > 0);
       if (valid.length > 0) {
@@ -142,24 +149,18 @@ export const LiveActivityToast: React.FC<LiveActivityToastProps> = ({
         return { name: p.name || (p as any).title, project: p };
       }
     }
-    // Fallback nama proyek Sentra Properti
-    const fallbackProjects = [
-      'Grand Sentra Harmoni',
-      'Sentra Sukajadi',
-      'Graha Sentra Asri',
-      'Sentra Hills Residence',
-    ];
-    const name = fallbackProjects[Math.floor(Math.random() * fallbackProjects.length)];
-    return { name };
+    return null;
   }, [projects]);
 
   // Generate data aktivitas baru (1 dari 3 aktivitas valid)
-  const generateNewActivity = useCallback((): ToastData => {
+  const generateNewActivity = useCallback((): ToastData | null => {
+    const projData = getRandomProject();
+    if (!projData || !projData.name) return null;
+
     const activityTypes: ActivityType[] = ['consultation', 'whatsapp', 'survey'];
     const chosenType = activityTypes[Math.floor(Math.random() * activityTypes.length)];
     const chosenCity = TARGET_CITIES[Math.floor(Math.random() * TARGET_CITIES.length)];
     const chosenTime = RELATIVE_TIMES[Math.floor(Math.random() * RELATIVE_TIMES.length)];
-    const { name: projName, project: projObj } = getRandomProject();
     const personName = getNextName();
 
     return {
@@ -167,16 +168,18 @@ export const LiveActivityToast: React.FC<LiveActivityToastProps> = ({
       type: chosenType,
       name: personName,
       city: chosenCity,
-      projectName: projName,
-      projectObj: projObj,
+      projectName: projData.name,
+      projectObj: projData.project,
       timeAgo: chosenTime,
     };
   }, [getNextName, getRandomProject]);
 
   // Fungsi memunculkan notifikasi
   const showToast = useCallback(() => {
-    if (isDismissedPermanently) return;
+    if (isDismissedPermanently || !isEnabled) return;
     const newActivity = generateNewActivity();
+    if (!newActivity) return;
+
     setCurrentToast(newActivity);
     setIsVisible(true);
 
@@ -196,10 +199,18 @@ export const LiveActivityToast: React.FC<LiveActivityToastProps> = ({
         showToast();
       }, nextDelayMs);
     }, 7000);
-  }, [generateNewActivity, isDismissedPermanently]);
+  }, [generateNewActivity, isDismissedPermanently, isEnabled]);
 
-  // Siklus awal: Muncul pertama kali 8 detik setelah web dibuka
+  // Siklus awal: Muncul pertama kali 8 detik setelah web dibuka jika database aktif
   useEffect(() => {
+    if (!isEnabled) {
+      setIsVisible(false);
+      setCurrentToast(null);
+      if (timeoutHideRef.current) clearTimeout(timeoutHideRef.current);
+      if (timeoutNextRef.current) clearTimeout(timeoutNextRef.current);
+      return;
+    }
+
     nameDeckRef.current = shuffleArray(INDONESIAN_NAMES);
 
     const initialDelayTimer = setTimeout(() => {
@@ -211,7 +222,7 @@ export const LiveActivityToast: React.FC<LiveActivityToastProps> = ({
       if (timeoutHideRef.current) clearTimeout(timeoutHideRef.current);
       if (timeoutNextRef.current) clearTimeout(timeoutNextRef.current);
     };
-  }, [showToast]);
+  }, [showToast, isEnabled]);
 
   // Tombol close manual
   const handleClose = (e: React.MouseEvent) => {
@@ -244,7 +255,7 @@ export const LiveActivityToast: React.FC<LiveActivityToastProps> = ({
     }
   };
 
-  if (!currentToast || isDismissedPermanently) return null;
+  if (!isEnabled || !currentToast || isDismissedPermanently) return null;
 
   // Konfigurasi visual ringkas & kalimat alami sesuai aktivitas
   const getActivityConfig = () => {
