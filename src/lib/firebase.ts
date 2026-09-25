@@ -214,11 +214,7 @@ export async function fetchCities(): Promise<City[]> {
   }
 
   const localCities = getLocal<City[]>(STORAGE_KEYS.CITIES, []);
-  const finalCities = localCities.length > 0 ? localCities : INITIAL_CITIES;
-  if (localCities.length === 0 && INITIAL_CITIES.length > 0) {
-    setLocal(STORAGE_KEYS.CITIES, INITIAL_CITIES);
-  }
-  return finalCities;
+  return localCities.length > 0 ? localCities : INITIAL_CITIES;
 }
 
 export async function addCity(city: Omit<City, 'id'> & { id?: string }): Promise<City> {
@@ -525,9 +521,6 @@ export async function fetchProjects(): Promise<Project[]> {
 
   const cached = getLocal<Project[]>(STORAGE_KEYS.PROJECTS, []);
   const projList = cached.length > 0 ? cached : INITIAL_PROJECTS;
-  if (cached.length === 0 && INITIAL_PROJECTS.length > 0) {
-    setLocal(STORAGE_KEYS.PROJECTS, INITIAL_PROJECTS);
-  }
   return projList.map((p, idx) => normalizeProjectData(p, idx));
 }
 
@@ -755,11 +748,7 @@ export async function fetchDocumentation(): Promise<DocumentationItem[]> {
   }
 
   const localDocs = getLocal<DocumentationItem[]>(STORAGE_KEYS.DOCS, []);
-  const finalDocs = localDocs.length > 0 ? localDocs : INITIAL_DOCUMENTATION;
-  if (localDocs.length === 0 && INITIAL_DOCUMENTATION.length > 0) {
-    setLocal(STORAGE_KEYS.DOCS, INITIAL_DOCUMENTATION);
-  }
-  return finalDocs;
+  return localDocs.length > 0 ? localDocs : INITIAL_DOCUMENTATION;
 }
 
 export async function addDocumentation(docItem: Omit<DocumentationItem, 'id'> & { id?: string }): Promise<DocumentationItem> {
