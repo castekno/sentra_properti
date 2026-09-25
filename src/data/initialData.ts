@@ -24,7 +24,7 @@ export const INITIAL_SETTINGS: SiteSettings = {
   
   instagramUrl: 'https://www.instagram.com/sentra.properti.palembang?stkn=MXIya3B6NzExbzRuZA==',
   facebookUrl: 'https://www.facebook.com/share/1EdgiDUV8Q/',
-  youtubeUrl: '',
+  youtubeUrl: 'https://www.youtube.com/',
 };
 
 // Data dipindahkan sepenuhnya ke Firebase Firestore
