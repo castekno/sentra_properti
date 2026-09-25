@@ -8,6 +8,7 @@ import { DocumentationSection } from './components/DocumentationSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { LiveActivityToast } from './components/LiveActivityToast';
 
 import { City, Project, DocumentationItem, SiteSettings } from './types';
 import { 
@@ -155,6 +156,13 @@ export default function App() {
       <FloatingWhatsApp
         settings={settings}
         activeProjectName={activeDetailProject?.name}
+      />
+
+      {/* 8.1. Live Activity Popups / Toast Notification (Mobile & Desktop) */}
+      <LiveActivityToast
+        projects={projects}
+        onSelectProject={(proj) => setActiveDetailProject(proj)}
+        onOpenConsultation={() => handleNavigate('hubungi-kami')}
       />
 
       {/* 9. Project Detail Modal (5 Primary Photos, Map, Full Specs, Sharia Payment Calc) */}
