@@ -95,6 +95,80 @@ export default function App() {
   // Indikator gangguan database (offline, kuota habis, atau koneksi gagal)
   const isDbError = isQuotaExceeded || hasDbError || !isDbConnected;
 
+  // Sinkronisasi SEO Structured Data (ItemList RealEstateListing) saat projects termuat dari database
+  useEffect(() => {
+    if (!projects || projects.length === 0) return;
+
+    // Periksa deep link ?proyek=slug dari URL (agar tautan spesifik rumah bisa langsung terbuka)
+    const params = new URLSearchParams(window.location.search);
+    const targetSlug = params.get('proyek');
+    if (targetSlug && !activeDetailProject) {
+      const matched = projects.find(
+        (p) =>
+          p.id === targetSlug ||
+          p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === targetSlug
+      );
+      if (matched) {
+        setActiveDetailProject(matched);
+      }
+    }
+
+    // Suntikkan Schema.org terstruktur untuk Google Search Console & Googlebot
+    const scriptId = 'google-realestate-items';
+    let scriptEl = document.getElementById(scriptId) as HTMLScriptElement | null;
+    if (!scriptEl) {
+      scriptEl = document.createElement('script');
+      scriptEl.id = scriptId;
+      scriptEl.type = 'application/ld+json';
+      document.head.appendChild(scriptEl);
+    }
+
+    const itemsSchema = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      'name': 'Daftar Perumahan Sentra Properti',
+      'url': 'https://sentraproperti.my.id/#properti',
+      'itemListElement': projects.map((p, idx) => ({
+        '@type': 'ListItem',
+        'position': idx + 1,
+        'item': {
+          '@type': 'SingleFamilyResidence',
+          'name': p.name,
+          'description': p.shortDescription || p.description,
+          'image': p.mainImage,
+          'address': {
+            '@type': 'PostalAddress',
+            'addressLocality': p.cityName || 'Palembang',
+            'streetAddress': p.locationAddress || p.cityName
+          },
+          'offers': {
+            '@type': 'Offer',
+            'price': p.price,
+            'priceCurrency': 'IDR',
+            'availability': 'https://schema.org/InStock',
+            'url': `https://sentraproperti.my.id/?proyek=${encodeURIComponent(p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'))}`
+          }
+        }
+      }))
+    };
+
+    scriptEl.text = JSON.stringify(itemsSchema);
+  }, [projects]);
+
+  // Sinkronisasi Judul Halaman dan URL ketika modal detail proyek dibuka/ditutup
+  useEffect(() => {
+    if (activeDetailProject) {
+      const slug = activeDetailProject.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      document.title = `${activeDetailProject.name} - Sentra Properti`;
+      window.history.replaceState(null, '', `?proyek=${slug}`);
+    } else {
+      document.title = 'Sentra Properti - Solusi Properti Terpercaya | Rumah Subsidi & Komersil Palembang';
+      if (window.location.search.includes('proyek=')) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    }
+  }, [activeDetailProject]);
+
   // Navigation Smooth Scroll
   const handleNavigate = (sectionId: string) => {
     setActiveSection(sectionId);
