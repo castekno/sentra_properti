@@ -1,5 +1,8 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { 
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
   getFirestore, 
   collection, 
   doc, 
@@ -29,10 +32,24 @@ export const firebaseConfig = {
 
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Inisialisasi Firestore secara eksplisit ke database "spdb"
-// Jangan pernah memanggil getFirestore(app) tanpa nama database "spdb" karena proyek sentrapropertidb
-// menggunakan database kustom "spdb" dan tidak memiliki database "(default)".
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "spdb");
+// Inisialisasi Firestore dengan Persistent Cache (IndexedDB) secara eksplisit ke database "spdb"
+// Fitur persistentLocalCache memungkinkan data yang telah dibaca disimpan secara lokal di browser/IndexedDB,
+// sehingga menghemat kuota pembacaan Firestore, mempercepat loading, dan mendukung sinkronisasi multi-tab.
+function initFirestoreWithPersistentCache(): Firestore {
+  const dbId = firebaseConfig.firestoreDatabaseId || "spdb";
+  try {
+    return initializeFirestore(app, {
+      localCache: persistentLocalCache({
+        tabManager: persistentMultipleTabManager()
+      })
+    }, dbId);
+  } catch (err) {
+    // Fallback jika instance Firestore sudah aktif (misal saat HMR / hot reload) atau IndexedDB tidak tersedia
+    return getFirestore(app, dbId);
+  }
+}
+
+export const db = initFirestoreWithPersistentCache();
 const primaryDb = db;
 
 // Status koneksi Firestore & kuota pembacaan
