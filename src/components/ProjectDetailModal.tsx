@@ -56,9 +56,44 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
     }
   };
 
+  // Daftar label skema pembayaran yang benar-benar aktif pada proyek ini
+  const activeSchemeLabels = React.useMemo(() => {
+    const rawSchemes = project?.paymentSchemes;
+    if (!rawSchemes || !Array.isArray(rawSchemes) || rawSchemes.length === 0) {
+      return [];
+    }
+
+    const labels: string[] = [];
+    for (const s of rawSchemes) {
+      if (!s) continue;
+      const lower = s.toString().toLowerCase().trim();
+      let label = '';
+      if (lower.includes('bertahap') || lower.includes('tempo')) {
+        label = 'Cash Bertahap';
+      } else if (lower.includes('bsi') || lower.includes('bank')) {
+        label = 'Cicilan BSI';
+      } else if (lower.includes('dev') || lower.includes('credit') || lower.includes('inhouse')) {
+        label = 'Credit Developer';
+      } else if (lower.includes('cash') || lower.includes('keras')) {
+        label = 'Cash';
+      } else {
+        label = s.toString().trim();
+      }
+
+      if (label && !labels.includes(label)) {
+        labels.push(label);
+      }
+    }
+
+    return labels;
+  }, [project?.paymentSchemes]);
+
   const handleWhatsAppInquiry = () => {
     const cleanNumber = (project.marketingWhatsApp || settings.whatsappNumber).replace(/[^0-9]/g, '');
-    const message = `Halo Sentra Properti, saya sangat berminat dengan proyek *${project.name}* di *${project.cityName}* (${project.priceDisplay}). Mohon informasi skema pembayaran (Cash / Cash Bertahap / Cicilan BSI) dan jadwal survey lokasi.`;
+    const schemeText = activeSchemeLabels.length > 0
+      ? ` (${activeSchemeLabels.join(' / ')})`
+      : '';
+    const message = `Halo Sentra Properti, saya sangat berminat dengan proyek *${project.name}* di *${project.cityName}* (${project.priceDisplay}). Mohon informasi skema pembayaran${schemeText} dan jadwal survey lokasi.`;
     const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
