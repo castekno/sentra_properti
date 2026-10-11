@@ -113,8 +113,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
-        const MAX_WIDTH = 1200;
-        const MAX_HEIGHT = 900;
+        const MAX_WIDTH = 960;
+        const MAX_HEIGHT = 720;
         let width = img.width;
         let height = img.height;
 
@@ -134,7 +134,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         ctx?.drawImage(img, 0, 0, width, height);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
         callback(dataUrl);
         showNotification('Foto berhasil dimuat!');
       };

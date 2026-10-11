@@ -108,10 +108,21 @@ export const Hero: React.FC<HeroProps> = ({
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B1E36]/95 via-[#0B1E36]/40 to-transparent"></div>
 
               {/* Bottom Card Summary */}
-              <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 text-white space-y-1.5 sm:space-y-3">
-                <div className="inline-block bg-white/20 backdrop-blur-md px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-semibold text-amber-300 border border-white/20">
-                  Pilihan Eksklusif Sentra Properti
+              <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 text-white space-y-2 sm:space-y-3">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <div className="w-11 h-11 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden border-2 border-amber-400 shadow-md ring-2 ring-amber-400/30 bg-slate-950 shrink-0">
+                    <img
+                      src="/logos.png"
+                      alt="Logo Resmi Sentra Properti"
+                      className="w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <div className="inline-block bg-white/20 backdrop-blur-md px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md sm:rounded-lg text-[10px] sm:text-xs font-semibold text-amber-300 border border-white/20">
+                    Pilihan Eksklusif Sentra Properti
+                  </div>
                 </div>
+
                 <h3 className="text-sm sm:text-xl lg:text-2xl font-bold leading-tight font-['Outfit',sans-serif]">
                   Temukan Cluster Idaman di Kota Pilihan Anda
                 </h3>

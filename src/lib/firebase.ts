@@ -121,8 +121,38 @@ function getLocal<T>(key: string, fallback: T): T {
 function setLocal<T>(key: string, value: T): void {
   try {
     localStorage.setItem(key, JSON.stringify(value));
-  } catch (e) {
-    console.warn('LocalStorage error:', e);
+  } catch (e: any) {
+    // Tangani jika kuota localStorage peramban (5MB) penuh (QuotaExceededError)
+    try {
+      // Hapus data lama yang tersimpan untuk membebaskan ruang
+      localStorage.removeItem(key);
+
+      // Jika value adalah array (seperti daftar proyek), buat versi hemat memori tanpa data base64 raksasa
+      if (Array.isArray(value)) {
+        const lightweight = (value as any[]).map(item => {
+          if (item && typeof item === 'object') {
+            const clone = { ...item };
+            if (Array.isArray(clone.photos)) {
+              clone.photos = clone.photos.map((p: string) => 
+                typeof p === 'string' && p.startsWith('data:') && p.length > 25000 
+                  ? 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' 
+                  : p
+              );
+            }
+            if (typeof clone.image === 'string' && clone.image.startsWith('data:') && clone.image.length > 25000) {
+              clone.image = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80';
+            }
+            return clone;
+          }
+          return item;
+        });
+        localStorage.setItem(key, JSON.stringify(lightweight));
+      }
+    } catch {
+      // Penyimpanan utama dan offline cache saat ini sudah ditangani dengan andal oleh
+      // IndexedDB (Firestore Persistent Cache). Jika kuota localStorage browser penuh,
+      // aplikasi tetap berfungsi normal tanpa melempar error ke pengguna.
+    }
   }
 }
 
