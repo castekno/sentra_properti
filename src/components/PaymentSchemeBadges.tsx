@@ -251,4 +251,3 @@ export const PaymentSchemeBadges: React.FC<PaymentSchemeBadgesProps> = ({
     </>
   );
 };
-

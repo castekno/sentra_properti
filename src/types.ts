@@ -10,7 +10,7 @@ export interface City {
   badge?: string;
 }
 
-export type PropertyStatus = 'Ready Stock' | 'Indent' | 'Hot Deal' | 'Promo Spesial' | 'Sold Out' | 'Under Construction';
+export type PropertyStatus = 'Ready Stock' | 'Indent' | 'Hot Deal' | 'Promo Spesial' | 'Sold Out' | 'Under Construction' | 'Tersedia' | string;
 
 export interface ProjectSpecs {
   surfaceArea: number; // Luas Tanah (m2)
@@ -51,6 +51,9 @@ export interface Project {
   // Details & Descriptions
   shortDescription: string;
   fullDescription: string;
+  description?: string;
+  mainImage?: string;
+  locationAddress?: string;
   specs: ProjectSpecs;
   facilities: string[]; // e.g. ["One Gate System", "Security 24 Jam & CCTV", "Clubhouse", "Kolam Renang", "Taman Bermain Anak", "Smart Home System"]
   advantages: string[]; // e.g. ["5 Menit ke Pintu Tol", "Dekat Stasiun LRT/KRL", "Bebas Banjir", "Dekat Pusat Perbelanjaan & Sekolah"]

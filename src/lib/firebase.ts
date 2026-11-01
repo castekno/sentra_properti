@@ -84,9 +84,18 @@ export function getFirestoreConnectionStatus() {
   };
 }
 
+// Deteksi crawler mesin pencari (Googlebot, Google Search Console InspectionTool, Bingbot, dll.)
+// agar langsung menggunakan data pre-loaded tanpa menguras kuota Read Firebase Free Tier
+function isSearchCrawler(): boolean {
+  if (typeof navigator === 'undefined' || !navigator.userAgent) return false;
+  return /Googlebot|Google-InspectionTool|Storebot-Google|AdsBot-Google|bingbot|Slurp|DuckDuckBot|Baiduspider|YandexBot|facebot|facebookexternalhit|ia_archiver|WhatsApp|TelegramBot/i.test(
+    navigator.userAgent
+  );
+}
+
 // Helper eksekusi database menggunakan instance Firestore target "spdb"
 async function executeWithDb<T>(action: (targetDb: Firestore) => Promise<T>): Promise<T | null> {
-  if (firestoreQuotaExceeded) {
+  if (firestoreQuotaExceeded || isSearchCrawler()) {
     return null;
   }
   try {
@@ -484,11 +493,14 @@ export function normalizeProjectData(p: any, idx = 0, docId?: string): Project {
     installmentDisplay: p.installmentDisplay || '',
     status: p.status || 'Ready Stock',
     address: p.address || 'Palembang, Sumatera Selatan',
+    locationAddress: p.address || 'Palembang, Sumatera Selatan',
     mapEmbedUrl: p.mapEmbedUrl || p.mapUrl || 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127506.74996452285!2d104.68653229999999!3d-2.9549673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e3b75e8e858793b%3A0x3039d80b220cc30!2sKota%20Palembang%2C%20Sumatera%20Selatan!5e0!3m2!1sid!2sid!4v1700000000001!5m2!1sid!2sid',
     mapDirectionsUrl: p.mapDirectionsUrl || p.mapUrl || '',
     coordinates: p.coordinates || { lat: -2.9549, lng: 104.6865 },
     shortDescription: p.shortDescription || p.description || '',
     fullDescription: p.fullDescription || p.description || '',
+    description: p.fullDescription || p.shortDescription || p.description || '',
+    mainImage: photos[0],
     specs: {
       surfaceArea: p.specs?.surfaceArea || p.landArea || p.surfaceArea || 90,
       buildingArea: p.specs?.buildingArea || p.buildingArea || 60,
