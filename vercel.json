@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!sitemap\\.xml|sitemap-katalog\\.xml|robots\\.txt|logos\\.png|catalog/|assets/).*)",
       "destination": "/index.html"
     }
   ],
@@ -16,11 +16,28 @@
       ]
     },
     {
-      "source": "/(robots.txt|sitemap.xml)",
+      "source": "/(sitemap\\.xml|sitemap-katalog\\.xml)",
       "headers": [
         {
+          "key": "Content-Type",
+          "value": "application/xml; charset=utf-8"
+        },
+        {
           "key": "Cache-Control",
-          "value": "public, max-age=3600"
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/robots.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
         }
       ]
     }
