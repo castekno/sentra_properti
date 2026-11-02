@@ -37,7 +37,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
 }) => {
   if (!project) return null;
 
-  // Active Photo Index (0 to 4 for 5 main photos)
+  // Active Photo Index
   const [activePhotoIdx, setActivePhotoIdx] = useState<number>(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -125,69 +125,69 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   return (
     <div 
       id="project-detail-modal-backdrop" 
-      className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 lg:p-6"
+      className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 lg:p-6"
       onClick={onClose}
     >
       <div 
         id="project-detail-modal-card"
-        className="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[92vh] flex flex-col animate-in zoom-in-95 duration-200"
+        className="bg-white w-full max-w-5xl rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden my-auto max-h-[94vh] sm:max-h-[92vh] flex flex-col animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header Bar */}
-        <div className="bg-[#0B1E36] text-white px-6 py-4 flex items-center justify-between shrink-0 border-b border-amber-500/30">
-          <div className="flex items-center gap-3">
-            <span className="px-3 py-1 bg-amber-500 text-slate-950 font-black text-xs rounded-full uppercase tracking-wider">
+        {/* Header Bar (Compact on Mobile) */}
+        <div className="bg-[#0B1E36] text-white px-3.5 py-2.5 sm:px-6 sm:py-4 flex items-center justify-between gap-2 shrink-0 border-b border-amber-500/30">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-amber-500 text-slate-950 font-black text-[10px] sm:text-xs rounded-full uppercase tracking-wider shrink-0">
               {project.status}
             </span>
-            <div>
-              <h2 className="text-lg sm:text-xl font-bold font-['Outfit',sans-serif] leading-tight">
+            <div className="min-w-0">
+              <h2 className="text-sm sm:text-xl font-bold font-['Outfit',sans-serif] leading-snug truncate">
                 {project.name}
               </h2>
-              <p className="text-xs text-amber-200/90 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                <span>{project.cityName} • {project.developer}</span>
+              <p className="text-[11px] sm:text-xs text-amber-200/90 flex items-center gap-1 truncate">
+                <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 shrink-0" />
+                <span className="truncate">{project.cityName} • {project.developer}</span>
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <button
               id="modal-share-btn"
               onClick={handleShare}
               title="Bagikan Proyek"
-              className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-1.5 sm:p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
-              <Share2 className="w-5 h-5" />
+              <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             {isCopied && (
-              <span className="text-[11px] bg-emerald-600 text-white px-2 py-0.5 rounded-md">
+              <span className="text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded-md">
                 Tersalin!
               </span>
             )}
             <button
               id="modal-close-btn"
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
+              className="p-1.5 sm:p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               aria-label="Tutup"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
         </div>
 
         {/* Scrollable Content Body */}
-        <div className="overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-8 flex-1">
+        <div className="overflow-y-auto p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-7 flex-1">
           
           {/* ================= 1. FOTO UTAMA PROJECT ================= */}
-          <div id="project-photos-section" className="space-y-3">
+          <div id="project-photos-section" className="space-y-2 sm:space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-                Foto Proyek ({photoCount} Foto)
+              <h3 className="text-xs sm:text-base font-bold text-slate-900 flex items-center gap-1.5 sm:gap-2">
+                <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-500"></span>
+                <span>Foto Proyek ({photoCount} Foto)</span>
               </h3>
               {photoCount > 1 && (
-                <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                  Foto {safeActiveIdx + 1} dari {photoCount}
+                <span className="text-[10px] sm:text-xs font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
+                  Foto {safeActiveIdx + 1} / {photoCount}
                 </span>
               )}
             </div>
@@ -195,7 +195,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             {/* Main Stage Active Photo */}
             <div 
               onClick={() => setIsLightboxOpen(true)}
-              className="relative rounded-2xl overflow-hidden bg-slate-900 aspect-[16/9] shadow-md group cursor-pointer"
+              className="relative rounded-xl sm:rounded-2xl overflow-hidden bg-slate-900 aspect-[16/9] max-h-[215px] sm:max-h-none w-full shadow-md group cursor-pointer"
             >
               {validPhotos[safeActiveIdx] ? (
                 <img
@@ -206,7 +206,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-slate-800 text-slate-400">
-                  <Building2 className="w-16 h-16 opacity-50" />
+                  <Building2 className="w-12 h-12 sm:w-16 sm:h-16 opacity-50" />
                 </div>
               )}
 
@@ -219,10 +219,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                       e.stopPropagation();
                       setActivePhotoIdx((prev) => (prev > 0 ? prev - 1 : photoCount - 1));
                     }}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white transition-transform hover:scale-110 active:scale-95 cursor-pointer z-10"
+                    className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 p-1.5 sm:p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white transition-transform hover:scale-110 active:scale-95 cursor-pointer z-10"
                     aria-label="Foto Sebelumnya"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
 
                   <button
@@ -231,19 +231,19 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                       e.stopPropagation();
                       setActivePhotoIdx((prev) => (prev < photoCount - 1 ? prev + 1 : 0));
                     }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white transition-transform hover:scale-110 active:scale-95 cursor-pointer z-10"
+                    className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 p-1.5 sm:p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-white transition-transform hover:scale-110 active:scale-95 cursor-pointer z-10"
                     aria-label="Foto Selanjutnya"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
                 </>
               )}
 
               {/* Caption & HD Click Overlay */}
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-3 sm:p-4 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-2.5">
-                <p className="text-xs sm:text-sm font-semibold tracking-wide flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0"></span>
-                  <span className="line-clamp-1">{currentCaption}</span>
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-2 sm:p-4 text-white flex items-center justify-between gap-2">
+                <p className="text-[11px] sm:text-sm font-semibold tracking-wide flex items-center gap-1.5 min-w-0">
+                  <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-400 shrink-0"></span>
+                  <span className="truncate">{currentCaption}</span>
                 </p>
 
                 {/* Tulisan Kuning Kanan Bawah Foto Utama */}
@@ -253,27 +253,26 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     e.stopPropagation();
                     setIsLightboxOpen(true);
                   }}
-                  className="self-end sm:self-auto text-yellow-400 hover:text-yellow-300 font-bold text-xs sm:text-sm flex items-center gap-1.5 shrink-0 bg-black/55 hover:bg-black/75 backdrop-blur-xs px-2.5 py-1.5 rounded-lg border border-yellow-400/50 shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                  className="text-yellow-400 hover:text-yellow-300 font-bold text-[10px] sm:text-sm flex items-center gap-1 shrink-0 bg-black/60 hover:bg-black/80 backdrop-blur-xs px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg border border-yellow-400/50 shadow-sm transition-all cursor-pointer"
                 >
-                  <Maximize2 className="w-3.5 h-3.5 text-yellow-400" />
-                  <span>Klik foto untuk perbesar (HD)</span>
+                  <Maximize2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-400" />
+                  <span className="hidden xs:inline">Klik foto untuk perbesar (HD)</span>
+                  <span className="xs:hidden">Perbesar (HD)</span>
                 </button>
               </div>
             </div>
 
-            {/* Thumbnails Grid (Kapasitas Maksimal 6 Foto, Ukuran Kotak Konsisten & Proporsional Berapapun Jumlah Fotonya) */}
+            {/* Thumbnails Grid */}
             {photoCount > 0 && (
-              <div 
-                className="grid grid-cols-6 gap-2 sm:gap-2.5"
-              >
+              <div className="grid grid-cols-6 gap-1.5 sm:gap-2.5">
                 {validPhotos.map((photoUrl, idx) => (
                   <button
                     key={idx}
                     id={`photo-thumb-btn-${idx}`}
                     onClick={() => setActivePhotoIdx(idx)}
-                    className={`relative rounded-xl overflow-hidden aspect-[4/3] max-h-16 sm:max-h-20 w-full border-2 transition-all duration-200 cursor-pointer ${
+                    className={`relative rounded-lg sm:rounded-xl overflow-hidden aspect-[4/3] max-h-12 sm:max-h-20 w-full border-2 transition-all duration-200 cursor-pointer ${
                       safeActiveIdx === idx
-                        ? 'border-amber-500 ring-2 ring-amber-400/80 shadow-md scale-95'
+                        ? 'border-amber-500 ring-2 ring-amber-400/80 shadow-sm scale-95'
                         : 'border-slate-200/80 bg-slate-100 opacity-75 hover:opacity-100 hover:border-slate-300'
                     }`}
                   >
@@ -282,7 +281,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                       alt={`Thumbnail ${idx + 1}`}
                       className="w-full h-full object-cover"
                     />
-                    <span className="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded">
+                    <span className="absolute bottom-0.5 right-0.5 bg-black/70 text-white text-[8px] sm:text-[10px] font-bold px-1 py-0.2 rounded">
                       #{idx + 1}
                     </span>
                   </button>
@@ -292,24 +291,25 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
           </div>
 
           {/* ================= 2. PRICE & KEY HIGHLIGHTS ================= */}
-          <div className="bg-amber-50/60 p-5 sm:p-6 rounded-2xl border border-amber-200/80 space-y-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <p className="text-xs font-semibold text-amber-800 uppercase tracking-wider">Harga Penawaran Spesial</p>
-                <h3 className="text-2xl sm:text-3xl font-black text-[#0B1E36] font-['Outfit',sans-serif]">
+          <div className="bg-amber-50/60 p-3 sm:p-5 rounded-xl sm:rounded-2xl border border-amber-200/80 space-y-2.5 sm:space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 sm:gap-4">
+              <div className="space-y-0.5">
+                <p className="text-[10px] sm:text-xs font-semibold text-amber-800 uppercase tracking-wider">Harga Penawaran Spesial</p>
+                <h3 className="text-xl sm:text-3xl font-black text-[#0B1E36] font-['Outfit',sans-serif] leading-tight">
                   {project.priceDisplay}
                 </h3>
-                <p className="text-xs text-slate-600 flex items-center gap-1.5 pt-0.5">
-                  <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                <p className="text-[11px] sm:text-xs text-slate-600 flex items-center gap-1 pt-0.5">
+                  <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-600 shrink-0" />
                   <span>{project.address}</span>
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-2.5 justify-end shrink-0">
+              {/* Desktop Direct CTA Buttons (On mobile these are neatly unified in the sticky bottom bar) */}
+              <div className="hidden md:flex items-center gap-2.5 justify-end shrink-0">
                 <button
                   id="modal-wa-direct-btn"
                   onClick={handleWhatsAppInquiry}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-sm py-3 px-5 rounded-xl shadow-md transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-sm py-2.5 px-5 rounded-xl shadow-md transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Tanya Marketing</span>
@@ -321,7 +321,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
                     onOpenBookingSurvey(project);
                     onClose();
                   }}
-                  className="flex items-center justify-center gap-2 bg-[#0B1E36] hover:bg-[#122b4d] text-amber-300 font-bold text-sm py-3 px-5 rounded-xl shadow-md transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+                  className="flex items-center justify-center gap-2 bg-[#0B1E36] hover:bg-[#122b4d] text-amber-300 font-bold text-sm py-2.5 px-5 rounded-xl shadow-md transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <Calendar className="w-4 h-4" />
                   <span>Survey Lokasi</span>
@@ -330,121 +330,121 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             </div>
 
             {/* Skema Penjualan Tersedia Badges */}
-            <div className="pt-3 border-t border-amber-200/80">
-              <PaymentSchemeBadges schemes={project.paymentSchemes} />
+            <div className="pt-2 sm:pt-3 border-t border-amber-200/80">
+              <PaymentSchemeBadges schemes={project.paymentSchemes} badgeSize="sm" />
             </div>
           </div>
 
           {/* ================= 3. DETAIL SPESIFIKASI PROYEK ================= */}
-          <div id="project-specs-section" className="space-y-4">
-            <h3 className="text-base sm:text-lg font-bold text-[#0B1E36] flex items-center gap-2">
-              <Layers className="w-5 h-5 text-amber-600" />
-              Spesifikasi Bangunan & Unit
+          <div id="project-specs-section" className="space-y-2.5 sm:space-y-4">
+            <h3 className="text-sm sm:text-lg font-bold text-[#0B1E36] flex items-center gap-1.5 sm:gap-2">
+              <Layers className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
+              <span>Spesifikasi Bangunan & Unit</span>
             </h3>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                  <Maximize2 className="w-5 h-5" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3.5">
+              <div className="bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <Maximize2 className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
-                <div>
-                  <p className="text-[11px] text-slate-500 font-medium">Luas Tanah (LT)</p>
-                  <p className="text-sm font-bold text-slate-900">{project.specs.surfaceArea} m²</p>
-                </div>
-              </div>
-
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                  <Maximize2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-[11px] text-slate-500 font-medium">Luas Bangunan (LB)</p>
-                  <p className="text-sm font-bold text-slate-900">{project.specs.buildingArea} m²</p>
+                <div className="min-w-0">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight">Luas Tanah (LT)</p>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900">{project.specs.surfaceArea} m²</p>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                  <BedDouble className="w-5 h-5" />
+              <div className="bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <Maximize2 className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
-                <div>
-                  <p className="text-[11px] text-slate-500 font-medium">Kamar Tidur (KT)</p>
-                  <p className="text-sm font-bold text-slate-900">{project.specs.bedrooms} Kamar</p>
-                </div>
-              </div>
-
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                  <Bath className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-[11px] text-slate-500 font-medium">Kamar Mandi (KM)</p>
-                  <p className="text-sm font-bold text-slate-900">{project.specs.bathrooms} Kamar</p>
+                <div className="min-w-0">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight">Luas Bangunan (LB)</p>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900">{project.specs.buildingArea} m²</p>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                  <Car className="w-5 h-5" />
+              <div className="bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <BedDouble className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
-                <div>
-                  <p className="text-[11px] text-slate-500 font-medium">Carport</p>
-                  <p className="text-sm font-bold text-slate-900">{project.specs.carports} Mobil</p>
-                </div>
-              </div>
-
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                  <Zap className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-[11px] text-slate-500 font-medium">Daya Listrik</p>
-                  <p className="text-sm font-bold text-slate-900">{project.specs.electricity}</p>
+                <div className="min-w-0">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight">Kamar Tidur (KT)</p>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900">{project.specs.bedrooms} Kamar</p>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                  <Droplets className="w-5 h-5" />
+              <div className="bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <Bath className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
-                <div>
-                  <p className="text-[11px] text-slate-500 font-medium">Sumber Air</p>
-                  <p className="text-sm font-bold text-slate-900 truncate">{project.specs.water}</p>
+                <div className="min-w-0">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight">Kamar Mandi (KM)</p>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900">{project.specs.bathrooms} Kamar</p>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-                  <ShieldCheck className="w-5 h-5" />
+              <div className="bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <Car className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
-                <div>
-                  <p className="text-[11px] text-slate-500 font-medium">Legalitas</p>
-                  <p className="text-sm font-bold text-slate-900 truncate">{project.specs.certificate}</p>
+                <div className="min-w-0">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight">Carport</p>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900">{project.specs.carports} Mobil</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <Zap className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight">Daya Listrik</p>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900">{project.specs.electricity}</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <Droplets className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight">Sumber Air</p>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">{project.specs.water}</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-2 sm:p-3.5 rounded-xl sm:rounded-2xl border border-slate-200/80 flex items-center gap-2 sm:gap-3">
+                <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+                  <ShieldCheck className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium leading-tight">Legalitas</p>
+                  <p className="text-xs sm:text-sm font-bold text-slate-900 truncate">{project.specs.certificate}</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* ================= 4. DESKRIPSI & FASILITAS PROYEK ================= */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-7 space-y-4">
-              <h3 className="text-base sm:text-lg font-bold text-[#0B1E36] flex items-center gap-2">
-                <FileText className="w-5 h-5 text-amber-600" />
-                Deskripsi Lengkap Proyek
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8">
+            <div className="lg:col-span-7 space-y-2.5 sm:space-y-4">
+              <h3 className="text-sm sm:text-lg font-bold text-[#0B1E36] flex items-center gap-1.5 sm:gap-2">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
+                <span>Deskripsi Lengkap Proyek</span>
               </h3>
-              <div className="text-sm text-slate-700 leading-relaxed space-y-3 font-normal">
+              <div className="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2 sm:space-y-3 font-normal">
                 <p className="font-semibold text-slate-800">{project.tagline}</p>
                 <p>{project.fullDescription}</p>
               </div>
 
               {/* Keunggulan Lokasi */}
               {project.advantages && project.advantages.length > 0 && (
-                <div className="pt-2 space-y-2">
-                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider">Keunggulan & Aksesibilitas Lokasi:</h4>
-                  <ul className="space-y-1.5">
+                <div className="pt-1 sm:pt-2 space-y-1.5 sm:space-y-2">
+                  <h4 className="text-[11px] sm:text-xs font-bold text-slate-800 uppercase tracking-wider">Keunggulan & Aksesibilitas Lokasi:</h4>
+                  <ul className="space-y-1 sm:space-y-1.5">
                     {project.advantages.map((adv, i) => (
                       <li key={i} className="text-xs sm:text-sm text-slate-700 flex items-start gap-2">
-                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600 shrink-0 mt-0.5" />
                         <span>{adv}</span>
                       </li>
                     ))}
@@ -453,16 +453,16 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               )}
             </div>
 
-            <div className="lg:col-span-5 space-y-4">
-              <h3 className="text-base sm:text-lg font-bold text-[#0B1E36] flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-amber-600" />
-                Fasilitas Perumahan
+            <div className="lg:col-span-5 space-y-2.5 sm:space-y-4">
+              <h3 className="text-sm sm:text-lg font-bold text-[#0B1E36] flex items-center gap-1.5 sm:gap-2">
+                <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
+                <span>Fasilitas Perumahan</span>
               </h3>
 
-              <div className="space-y-2">
+              <div className="grid grid-cols-1 sm:grid-cols-1 gap-1.5 sm:gap-2">
                 {project.facilities.map((fac, i) => (
-                  <div key={i} className="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm font-medium text-slate-800">
-                    <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+                  <div key={i} className="flex items-center gap-2 p-2 sm:p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs sm:text-sm font-medium text-slate-800">
+                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 shrink-0"></span>
                     <span>{fac}</span>
                   </div>
                 ))}
@@ -472,28 +472,40 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
 
         </div>
 
-        {/* Modal Sticky Footer Action */}
-        <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-4 shrink-0">
+        {/* Modal Sticky Footer Action (Unified & Compact on Mobile) */}
+        <div className="p-2.5 sm:p-5 bg-slate-50 border-t border-slate-200 flex items-center justify-between gap-2 sm:gap-4 shrink-0">
           <div className="hidden sm:block">
             <p className="text-xs text-slate-500">Tertarik dengan {project.name}?</p>
             <p className="text-sm font-bold text-slate-900">Konsultasi Gratis & Jadwalkan Survey</p>
           </div>
 
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               id="modal-footer-close-btn"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-xl border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100 text-xs sm:text-sm cursor-pointer"
+              className="px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-slate-300 font-semibold text-slate-700 hover:bg-slate-100 text-xs sm:text-sm cursor-pointer shrink-0"
             >
               Tutup
             </button>
 
             <button
+              id="modal-footer-survey-btn"
+              onClick={() => {
+                onOpenBookingSurvey(project);
+                onClose();
+              }}
+              className="flex items-center justify-center gap-1.5 bg-[#0B1E36] hover:bg-[#122b4d] text-amber-300 font-bold text-xs sm:text-sm py-2 sm:py-2.5 px-3.5 sm:px-5 rounded-xl shadow transition-all cursor-pointer shrink-0"
+            >
+              <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>Survey Lokasi</span>
+            </button>
+
+            <button
               id="modal-footer-wa-btn"
               onClick={handleWhatsAppInquiry}
-              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-xs sm:text-sm py-2.5 px-6 rounded-xl shadow transition-all cursor-pointer"
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold text-xs sm:text-sm py-2 sm:py-2.5 px-4 sm:px-6 rounded-xl shadow transition-all cursor-pointer"
             >
-              <MessageCircle className="w-4 h-4" />
+              <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>Chat WhatsApp</span>
             </button>
           </div>

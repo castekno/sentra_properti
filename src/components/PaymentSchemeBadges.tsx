@@ -7,6 +7,7 @@ interface PaymentSchemeBadgesProps {
   schemes?: PaymentSchemeType[];
   className?: string;
   badgeSize?: 'sm' | 'md';
+  compact?: boolean;
 }
 
 interface SchemeConfig {
@@ -87,6 +88,7 @@ export const PaymentSchemeBadges: React.FC<PaymentSchemeBadgesProps> = ({
   schemes,
   className = '',
   badgeSize = 'md',
+  compact = false,
 }) => {
   const [selectedScheme, setSelectedScheme] = useState<SchemeConfig | null>(null);
 
@@ -118,11 +120,13 @@ export const PaymentSchemeBadges: React.FC<PaymentSchemeBadgesProps> = ({
     return result.length > 0 ? result : ['cash', 'bertahap', 'bsi'];
   }, [schemes]);
 
-  const sizeClasses = badgeSize === 'sm'
+  const sizeClasses = compact
+    ? 'px-2 py-0.5 text-[10px] sm:text-[11px] gap-1'
+    : badgeSize === 'sm'
     ? 'px-2.5 py-1 text-xs gap-1.5'
     : 'px-3 py-1.5 text-xs sm:text-[13px] gap-1.5';
 
-  const iconSize = badgeSize === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4';
+  const iconSize = compact ? 'w-3 h-3' : badgeSize === 'sm' ? 'w-3.5 h-3.5' : 'w-4 h-4';
 
   const handleBadgeClick = (e: React.MouseEvent, config: SchemeConfig) => {
     e.stopPropagation();
@@ -132,16 +136,24 @@ export const PaymentSchemeBadges: React.FC<PaymentSchemeBadgesProps> = ({
 
   return (
     <>
-      <div className={`space-y-2 ${className}`}>
-        {/* Header with Card Icon */}
-        <div className="flex items-center gap-1.5 text-slate-500 font-semibold text-xs sm:text-sm">
-          <CreditCard className="w-4 h-4 text-slate-400 shrink-0" />
-          <span>Skema Penjualan Tersedia:</span>
-          <span className="text-[11px] text-slate-400 font-normal hidden sm:inline">(Klik skema untuk detail)</span>
-        </div>
+      <div className={`${compact ? 'space-y-1' : 'space-y-2'} ${className}`}>
+        {/* Header with Card Icon (Hidden in compact card mode) */}
+        {!compact && (
+          <div className="flex items-center gap-1.5 text-slate-500 font-semibold text-xs sm:text-sm">
+            <CreditCard className="w-4 h-4 text-slate-400 shrink-0" />
+            <span>Skema Penjualan Tersedia:</span>
+            <span className="text-[11px] text-slate-400 font-normal hidden sm:inline">(Klik skema untuk detail)</span>
+          </div>
+        )}
 
         {/* Badges Container */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
+          {compact && (
+            <span className="text-[10px] font-semibold text-slate-400 mr-0.5 flex items-center gap-1">
+              <CreditCard className="w-3 h-3 text-slate-400 shrink-0" />
+              <span>Skema:</span>
+            </span>
+          )}
           {activeSchemes.map((schemeKey) => {
             const config = SCHEME_CONFIGS[schemeKey] || {
               id: schemeKey,
