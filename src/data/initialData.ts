@@ -52,6 +52,7 @@ export const INITIAL_CITIES: City[] = [
 export const INITIAL_PROJECTS: Project[] = [
   {
     "id": "proj-1793513359732",
+    "location": "Tanjung Barangan",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Qeena Jeju Residence (Ready Stock)",
@@ -121,6 +122,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1793508974764",
+    "location": "Kalidoni",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Mini Cluster Sultan 2",
@@ -188,6 +190,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1791422817799",
+    "location": "Plaju",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Rinjani D'Premiere Type Gardenia 50",
@@ -258,6 +261,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1791422290644",
+    "location": "Plaju",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Rinjani D'Premiere type Sapphire 62",
@@ -328,6 +332,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1791159955168",
+    "location": "Plaju",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Hafiz House Plaju",
@@ -392,6 +397,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1791159596600",
+    "location": "Sako",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Sako Premier",
@@ -456,6 +462,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1791158857570",
+    "location": "Pusri",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Mini Sultan Cluster Pusri",
@@ -521,6 +528,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1791158282110",
+    "location": "Jakabaring",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "OPI Barokah Estate",
@@ -588,6 +596,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1790576460444",
+    "location": "Talang Kelapa",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Ruko Sky Point Regency",
@@ -652,6 +661,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1790475167150",
+    "location": "Talang Kelapa",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Sky Point Regency",
@@ -721,6 +731,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1789964589266",
+    "location": "Tanjung Barangan",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Easton City 78",
@@ -786,6 +797,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1789963570184",
+    "location": "Tanjung Barangan",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Easton City 57",
@@ -851,6 +863,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1789961527059",
+    "location": "Talang Kelapa",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Villa Cendana Townhouse",
@@ -921,6 +934,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1789959910514",
+    "location": "Soekarno Hatta",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Soetta Prime Residence",
@@ -986,6 +1000,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1789107916729",
+    "location": "KM12",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Tanah Kelapa Hijau KM12",
@@ -1055,6 +1070,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1788170779884",
+    "location": "Sukamto",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Sukamto House",
@@ -1124,6 +1140,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1788170233161",
+    "location": "Talang Jambe",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Alya Harmoni Jambe",
@@ -1195,6 +1212,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1788167404972",
+    "location": "Plaju",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Sentosa Harmoni Residence",
@@ -1262,6 +1280,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1788164922510",
+    "location": "Plaju",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Vilamias Lematang Plaju",
@@ -1329,6 +1348,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1788161977693",
+    "location": "Bukit Baru",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Villa Bukit Indah Type Haruka",
@@ -1404,6 +1424,7 @@ export const INITIAL_PROJECTS: Project[] = [
   },
   {
     "id": "proj-1788141828834",
+    "location": "Bukit Baru",
     "cityId": "city-1788086167332",
     "cityName": "Palembang Kota",
     "name": "Villa Bukit Indah type Yumi",

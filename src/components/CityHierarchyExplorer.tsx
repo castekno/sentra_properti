@@ -543,12 +543,17 @@ export const CityHierarchyExplorer: React.FC<CityHierarchyExplorerProps> = ({
                       ) : null;
                     })()}
 
-                    {/* City Tag */}
-                    <div className="absolute top-2.5 right-2.5">
+                    {/* City Tag & Location */}
+                    <div className="absolute top-2.5 right-2.5 flex flex-col items-end gap-1 pointer-events-none">
                       <span className="px-2.5 py-0.5 rounded-full bg-white/95 backdrop-blur-xs text-[#0B1E36] font-bold text-[11px] shadow flex items-center gap-1">
                         <MapPin className="w-3 h-3 text-amber-600" />
                         {project.cityName}
                       </span>
+                      {project.location && (
+                        <span className="px-2 py-0.5 rounded-full bg-[#0B1E36]/85 backdrop-blur-xs text-amber-300 font-semibold text-[10px] shadow-xs border border-white/10">
+                          {project.location}
+                        </span>
+                      )}
                     </div>
 
                     {/* Bottom Gradient Over Title */}

@@ -145,7 +145,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
               </h2>
               <p className="text-[11px] sm:text-xs text-amber-200/90 flex items-center gap-1 truncate">
                 <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 shrink-0" />
-                <span className="truncate">{project.cityName} • {project.developer}</span>
+                <span className="truncate">{project.cityName}{project.location ? ` • ${project.location}` : ''} • {project.developer}</span>
               </p>
             </div>
           </div>

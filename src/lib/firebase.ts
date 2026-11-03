@@ -483,6 +483,7 @@ export function normalizeProjectData(p: any, idx = 0, docId?: string): Project {
     id,
     cityId: p.cityId || 'city-1788086167332',
     cityName: resolvedCityName,
+    location: p.location || p.lokasi || '',
     name: p.name || 'Proyek Perumahan',
     slug: p.slug || (p.name ? p.name.toLowerCase().replace(/\s+/g, '-') : id),
     tagline: p.tagline || (p.address ? `Hunian Nyaman di ${p.address}` : 'Hunian Syariah Nyaman & Berkah'),

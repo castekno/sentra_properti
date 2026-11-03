@@ -29,6 +29,7 @@ export interface Project {
   id: string;
   cityId: string;
   cityName: string;
+  location?: string;
   name: string;
   slug: string;
   tagline: string;
