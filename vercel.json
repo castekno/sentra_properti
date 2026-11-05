@@ -9,6 +9,17 @@
       "destination": "/api/sitemap"
     },
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "proyek",
+          "value": "(?<proyek>.+)"
+        }
+      ],
+      "destination": "/api/seo?proyek=:proyek"
+    },
+    {
       "source": "/((?!api/|sitemap\\.xml|sitemap-katalog\\.xml|robots\\.txt|logos\\.png|catalog/|assets/).*)",
       "destination": "/index.html"
     }

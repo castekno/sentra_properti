@@ -155,14 +155,141 @@ export default function App() {
     scriptEl.text = JSON.stringify(itemsSchema);
   }, [projects]);
 
-  // Sinkronisasi Judul Halaman dan URL ketika modal detail proyek dibuka/ditutup
+  // Sinkronisasi Judul Halaman, Meta Description, Canonical, dan Schema Breadcrumb ala Pinhome ketika proyek dibuka/ditutup
   useEffect(() => {
+    const baseUrl = 'https://sentraproperti.my.id';
+    const canonicalEl = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    const metaDescEl = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    const ogTitleEl = document.querySelector('meta[property="og:title"]') as HTMLMetaElement | null;
+    const ogDescEl = document.querySelector('meta[property="og:description"]') as HTMLMetaElement | null;
+    const ogUrlEl = document.querySelector('meta[property="og:url"]') as HTMLMetaElement | null;
+    const ogImageEl = document.querySelector('meta[property="og:image"]') as HTMLMetaElement | null;
+    const twTitleEl = document.querySelector('meta[name="twitter:title"]') as HTMLMetaElement | null;
+    const twDescEl = document.querySelector('meta[name="twitter:description"]') as HTMLMetaElement | null;
+
+    const projectSchemaId = 'google-active-project-schema';
+    let projectSchemaEl = document.getElementById(projectSchemaId) as HTMLScriptElement | null;
+
     if (activeDetailProject) {
-      const slug = activeDetailProject.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      document.title = `${activeDetailProject.name} - Sentra Properti`;
+      const p = activeDetailProject;
+      const slug = p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const projectUrl = `${baseUrl}/?proyek=${slug}`;
+      const category = p.type || 'Rumah';
+      const cityClean = (p.cityName || 'Palembang').replace(/\s+Kota$/i, '');
+      const locArea = p.location || p.address || cityClean;
+
+      // Format Harga singkat (misal Rp 550 Juta atau Rp 550.000.000)
+      const priceText =
+        p.price >= 1000000000
+          ? `Rp ${(p.price / 1000000000).toLocaleString('id-ID', { maximumFractionDigits: 2 })} Miliar`
+          : p.price >= 1000000
+          ? `Rp ${Math.round(p.price / 1000000).toLocaleString('id-ID')} Juta`
+          : p.priceDisplay || 'Hubungi Kami';
+
+      // Judul ala Pinhome: "Dijual Rumah Qeena Jeju Residence di Tanjung Barangan Palembang - Sentra Properti"
+      const seoTitle = `Dijual ${category} ${p.name} di ${locArea} ${cityClean} - Sentra Properti`;
+
+      // Deskripsi ala Pinhome: "Rumah dengan 2 kamar tidur serta luas tanah 275 m² di perumahan Ready Stock di Tanjung Barangan, Palembang harga Rp 550 Juta."
+      const specsPart =
+        p.specs?.bedrooms && p.specs.bedrooms > 0
+          ? `dengan ${p.specs.bedrooms} kamar tidur serta luas tanah ${p.specs?.surfaceArea || 90} m² (LB ${p.specs?.buildingArea || 60} m²)`
+          : `dengan luas tanah ${p.specs?.surfaceArea || 90} m²`;
+      const seoDesc = `${category} ${specsPart} di perumahan komersil & syariah (${p.status || 'Ready Stock'}) di ${p.address ? `${p.address}, ` : ''}${locArea}, ${cityClean} harga ${priceText}. Legalitas SHM aman bersama Sentra Properti.`;
+
+      document.title = seoTitle;
       window.history.replaceState(null, '', `?proyek=${slug}`);
+
+      if (canonicalEl) canonicalEl.href = projectUrl;
+      if (metaDescEl) metaDescEl.content = seoDesc;
+      if (ogTitleEl) ogTitleEl.content = seoTitle;
+      if (ogDescEl) ogDescEl.content = seoDesc;
+      if (ogUrlEl) ogUrlEl.content = projectUrl;
+      if (twTitleEl) twTitleEl.content = seoTitle;
+      if (twDescEl) twDescEl.content = seoDesc;
+
+      const rawImg = p.photos?.[0] || p.mainImage || '';
+      const fullImgUrl = rawImg.startsWith('http') ? rawImg : `${baseUrl}${rawImg.startsWith('/') ? '' : '/'}${rawImg}`;
+      if (ogImageEl && rawImg) ogImageEl.content = fullImgUrl;
+
+      // Suntikkan Schema BreadcrumbList (untuk menampilkan sentraproperti.my.id › Palembang Kota › Bukit Baru) + SingleFamilyResidence
+      if (!projectSchemaEl) {
+        projectSchemaEl = document.createElement('script');
+        projectSchemaEl.id = projectSchemaId;
+        projectSchemaEl.type = 'application/ld+json';
+        document.head.appendChild(projectSchemaEl);
+      }
+
+      const activeSchema = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'BreadcrumbList',
+            'itemListElement': [
+              {
+                '@type': 'ListItem',
+                'position': 1,
+                'name': 'Sentra Properti',
+                'item': `${baseUrl}/`,
+              },
+              {
+                '@type': 'ListItem',
+                'position': 2,
+                'name': p.cityName || 'Palembang Kota',
+                'item': `${baseUrl}/#kota`,
+              },
+              {
+                '@type': 'ListItem',
+                'position': 3,
+                'name': locArea,
+                'item': projectUrl,
+              },
+            ],
+          },
+          {
+            '@type': 'SingleFamilyResidence',
+            'name': seoTitle,
+            'description': seoDesc,
+            'url': projectUrl,
+            'image': fullImgUrl,
+            'numberOfRooms': p.specs?.bedrooms || 2,
+            'floorSize': {
+              '@type': 'QuantitativeValue',
+              'value': p.specs?.surfaceArea || 90,
+              'unitCode': 'MTK',
+            },
+            'address': {
+              '@type': 'PostalAddress',
+              'streetAddress': p.address || locArea,
+              'addressLocality': locArea,
+              'addressRegion': p.cityName || 'Palembang',
+              'addressCountry': 'ID',
+            },
+            'offers': {
+              '@type': 'Offer',
+              'price': p.price || 0,
+              'priceCurrency': 'IDR',
+              'availability': 'https://schema.org/InStock',
+              'url': projectUrl,
+            },
+          },
+        ],
+      };
+      projectSchemaEl.text = JSON.stringify(activeSchema);
     } else {
-      document.title = 'Sentra Properti - Solusi Properti Terpercaya | Rumah Subsidi & Komersil Palembang';
+      const defaultTitle = 'Sentra Properti - Solusi Properti Terpercaya | Rumah Subsidi & Komersil Palembang';
+      const defaultDesc =
+        'Platform resmi Sentra Properti (sentraproperti.my.id). Informasi perumahan subsidi dan komersil terpercaya di Palembang & sekitarnya dengan skema syariah & legalitas 100% aman.';
+
+      document.title = defaultTitle;
+      if (canonicalEl) canonicalEl.href = `${baseUrl}/`;
+      if (metaDescEl) metaDescEl.content = defaultDesc;
+      if (ogTitleEl) ogTitleEl.content = defaultTitle;
+      if (ogDescEl) ogDescEl.content = defaultDesc;
+      if (ogUrlEl) ogUrlEl.content = `${baseUrl}/`;
+      if (twTitleEl) twTitleEl.content = defaultTitle;
+      if (twDescEl) twDescEl.content = defaultDesc;
+      if (projectSchemaEl) projectSchemaEl.remove();
+
       if (window.location.search.includes('proyek=')) {
         window.history.replaceState(null, '', window.location.pathname);
       }
