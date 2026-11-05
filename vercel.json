@@ -1,7 +1,15 @@
 {
   "rewrites": [
     {
-      "source": "/((?!sitemap\\.xml|sitemap-katalog\\.xml|robots\\.txt|logos\\.png|catalog/|assets/).*)",
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/sitemap-katalog.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/((?!api/|sitemap\\.xml|sitemap-katalog\\.xml|robots\\.txt|logos\\.png|catalog/|assets/).*)",
       "destination": "/index.html"
     }
   ],
@@ -24,7 +32,7 @@
         },
         {
           "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
+          "value": "public, s-maxage=3600, stale-while-revalidate=86400"
         }
       ]
     },
