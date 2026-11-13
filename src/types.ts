@@ -36,6 +36,7 @@ export interface Project {
   developer: string;
   type: string; // e.g. "Cluster Mewah", "Rumah Minimalis Modern", "Townhouse 2 Lantai"
   price: number; // in IDR
+  promoPrice?: number; // in IDR (optional promo price)
   priceDisplay: string; // e.g. "Rp 850.000.000"
   installmentDisplay: string; // e.g. "Mulai Rp 4,2 Jt / bln"
   status: PropertyStatus;

@@ -466,6 +466,11 @@ export function normalizeProjectData(p: any, idx = 0, docId?: string): Project {
   }
 
   const rawPrice = typeof p.price === 'number' ? p.price : Number(p.price || 0);
+  const rawPromo =
+    p.promoPrice !== undefined && p.promoPrice !== null && p.promoPrice !== ''
+      ? Number(p.promoPrice)
+      : undefined;
+  const promoPrice = typeof rawPromo === 'number' && !isNaN(rawPromo) && rawPromo > 0 ? rawPromo : undefined;
 
   // Resolusi nama kota dari cityId jika belum terisi
   let resolvedCityName = p.cityName || '';
@@ -490,6 +495,7 @@ export function normalizeProjectData(p: any, idx = 0, docId?: string): Project {
     developer: p.developer || 'Sentra Land Development',
     type: p.type || p.category || 'Cluster Minimalis Modern',
     price: rawPrice,
+    ...(promoPrice !== undefined ? { promoPrice } : {}),
     priceDisplay: p.priceDisplay || (rawPrice ? `Rp ${rawPrice.toLocaleString('id-ID')}` : 'Hubungi Kami'),
     installmentDisplay: p.installmentDisplay || '',
     status: p.status || 'Ready Stock',
@@ -648,6 +654,7 @@ export async function addProject(project: Omit<Project, 'id'> & { id?: string })
     cityId: fullProject.cityId,
     cityName: fullProject.cityName,
     price: fullProject.price,
+    ...(fullProject.promoPrice !== undefined ? { promoPrice: fullProject.promoPrice } : {}),
     address: fullProject.address,
     landArea: fullProject.specs?.surfaceArea || 90,
     buildingArea: fullProject.specs?.buildingArea || 60,

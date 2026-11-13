@@ -571,13 +571,24 @@ export const CityHierarchyExplorer: React.FC<CityHierarchyExplorerProps> = ({
                     
                     {/* Row 1: Price & Location Compact */}
                     <div className="space-y-1">
-                      <div className="flex items-baseline justify-between gap-2">
+                      <div className="flex items-end justify-between gap-2">
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                           Harga Mulai
                         </span>
-                        <span className="text-lg sm:text-xl font-black text-[#0B1E36] font-['Outfit',sans-serif] leading-none">
-                          {project.priceDisplay}
-                        </span>
+                        {project.promoPrice && project.promoPrice > 0 ? (
+                          <div className="flex flex-col items-end text-right">
+                            <span className="text-[11px] sm:text-xs font-semibold text-slate-400 line-through leading-tight mb-0.5">
+                              {project.priceDisplay}
+                            </span>
+                            <span className="text-lg sm:text-xl font-black text-[#0B1E36] font-['Outfit',sans-serif] leading-none">
+                              Rp {project.promoPrice.toLocaleString('id-ID')}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-lg sm:text-xl font-black text-[#0B1E36] font-['Outfit',sans-serif] leading-none">
+                            {project.priceDisplay}
+                          </span>
+                        )}
                       </div>
 
                       <p className="text-[11px] text-slate-500 line-clamp-1 flex items-center gap-1">

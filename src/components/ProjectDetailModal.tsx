@@ -295,9 +295,20 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 sm:gap-4">
               <div className="space-y-0.5">
                 <p className="text-[10px] sm:text-xs font-semibold text-amber-800 uppercase tracking-wider">Harga Penawaran Spesial</p>
-                <h3 className="text-xl sm:text-3xl font-black text-[#0B1E36] font-['Outfit',sans-serif] leading-tight">
-                  {project.priceDisplay}
-                </h3>
+                {project.promoPrice && project.promoPrice > 0 ? (
+                  <div className="flex flex-col">
+                    <span className="text-xs sm:text-base font-semibold text-slate-400 line-through leading-tight">
+                      {project.priceDisplay}
+                    </span>
+                    <h3 className="text-xl sm:text-3xl font-black text-[#0B1E36] font-['Outfit',sans-serif] leading-tight">
+                      Rp {project.promoPrice.toLocaleString('id-ID')}
+                    </h3>
+                  </div>
+                ) : (
+                  <h3 className="text-xl sm:text-3xl font-black text-[#0B1E36] font-['Outfit',sans-serif] leading-tight">
+                    {project.priceDisplay}
+                  </h3>
+                )}
                 <p className="text-[11px] sm:text-xs text-slate-600 flex items-center gap-1 pt-0.5">
                   <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-600 shrink-0" />
                   <span>{project.address}</span>
