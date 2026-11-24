@@ -118,7 +118,7 @@ export default async function handler(req: any, res: any) {
             : `dengan luas tanah ${surfaceArea} m²`;
         const seoDesc = `${category} ${specsPart} di perumahan komersil & syariah (${status}) di ${p.address ? `${p.address}, ` : ''}${locArea}, ${cityClean} harga ${priceText}. Legalitas SHM aman bersama Sentra Properti.`;
 
-        const rawImg = (Array.isArray(p.photos) && p.photos[0]) || p.mainImage || p.image || '/logos.png';
+        const rawImg = (Array.isArray(p.photos) && p.photos[0]) || p.mainImage || p.image || '/logo-sentra.png';
         const fullImgUrl = rawImg.startsWith('http') ? rawImg : `${baseUrl}${rawImg.startsWith('/') ? '' : '/'}${rawImg}`;
 
         const breadcrumbAndItemSchema = {

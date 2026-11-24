@@ -18,6 +18,7 @@ import {
   fetchSiteSettings,
   getFirestoreConnectionStatus
 } from './lib/firebase';
+import { trackProjectView } from './lib/analytics';
 import { 
   INITIAL_CITIES, 
   INITIAL_PROJECTS, 
@@ -198,6 +199,7 @@ export default function App() {
 
       document.title = seoTitle;
       window.history.replaceState(null, '', `?proyek=${slug}`);
+      trackProjectView({ ...p, slug });
 
       if (canonicalEl) canonicalEl.href = projectUrl;
       if (metaDescEl) metaDescEl.content = seoDesc;

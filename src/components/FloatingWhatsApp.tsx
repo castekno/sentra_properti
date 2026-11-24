@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MessageCircle, X, Send, PhoneCall, CheckCheck, CalendarCheck } from 'lucide-react';
 import { SiteSettings } from '../types';
+import { trackWhatsAppClick } from '../lib/analytics';
 
 interface FloatingWhatsAppProps {
   settings: SiteSettings;
@@ -21,6 +22,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
     : (settings.whatsappDefaultMessage || 'Halo Sentra Properti, saya tertarik dengan informasi proyek perumahan. Mohon bantuan konsultasi.');
 
   const handleOpenWhatsApp = (customMessageText?: string) => {
+    trackWhatsAppClick('floating_whatsapp', activeProjectName);
     const textToSend = customMessageText || customMsg || defaultText;
     const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(textToSend)}`;
     window.open(url, '_blank', 'noopener,noreferrer');

@@ -112,8 +112,11 @@ export const Hero: React.FC<HeroProps> = ({
                 <div className="flex items-center gap-2.5 sm:gap-3">
                   <div className="w-11 h-11 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full overflow-hidden border-2 border-amber-400 shadow-md ring-2 ring-amber-400/30 bg-slate-950 shrink-0">
                     <img
-                      src="/assets/aistudio/12502_4a7b0b64.png"
+                      src="/logo-sentra.webp"
                       alt="Logo Resmi Sentra Properti"
+                      width={64}
+                      height={64}
+                      decoding="async"
                       className="w-full h-full object-cover scale-102"
                       referrerPolicy="no-referrer"
                     />

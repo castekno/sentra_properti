@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { Project, SiteSettings } from '../types';
 import { PaymentSchemeBadges } from './PaymentSchemeBadges';
+import { trackWhatsAppClick } from '../lib/analytics';
 
 interface ProjectDetailModalProps {
   project: Project | null;
@@ -89,6 +90,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({
   }, [project?.paymentSchemes]);
 
   const handleWhatsAppInquiry = () => {
+    trackWhatsAppClick('project_detail_modal', project.name);
     const cleanNumber = (project.marketingWhatsApp || settings.whatsappNumber).replace(/[^0-9]/g, '');
     const schemeText = activeSchemeLabels.length > 0
       ? ` (${activeSchemeLabels.join(' / ')})`

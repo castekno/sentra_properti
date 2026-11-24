@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { City, Project, SiteSettings, InquiryFormData } from '../types';
 import { submitInquiry } from '../lib/firebase';
+import { trackInquirySubmit } from '../lib/analytics';
 
 interface ContactSectionProps {
   settings: SiteSettings;
@@ -58,6 +59,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
     setIsSubmitting(true);
     try {
       await submitInquiry(formData);
+      trackInquirySubmit(formData.preferredProject);
       setSubmittedSuccess(true);
 
       // Open WhatsApp with compiled structured message

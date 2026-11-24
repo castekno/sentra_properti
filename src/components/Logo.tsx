@@ -27,8 +27,11 @@ export const Logo: React.FC<LogoProps> = ({
       {/* Logo 3D Gold Emblem yang diupload pengguna */}
       <div className={`${currentSize.imgClass} rounded-full overflow-hidden shrink-0 shadow-md ring-1 ring-amber-400/50 bg-[#0B1E36]`}>
         <img
-          src="/assets/aistudio/12502_4a7b0b64.png"
+          src="/logo-sentra.webp"
           alt="Logo Sentra Properti"
+          width={80}
+          height={80}
+          decoding="async"
           className="w-full h-full object-cover scale-102"
         />
       </div>

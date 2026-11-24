@@ -20,7 +20,7 @@
       "destination": "/api/seo?proyek=:proyek"
     },
     {
-      "source": "/((?!api/|sitemap\\.xml|sitemap-katalog\\.xml|robots\\.txt|logos\\.png|catalog/|assets/).*)",
+      "source": "/((?!api/|sitemap\\.xml|sitemap-katalog\\.xml|robots\\.txt|logos\\.png|logo-sentra\\.webp|logo-sentra\\.png|catalog/|assets/).*)",
       "destination": "/index.html"
     }
   ],
@@ -31,6 +31,15 @@
         {
           "key": "X-Robots-Tag",
           "value": "all"
+        }
+      ]
+    },
+    {
+      "source": "/(logo-sentra\\.webp|logo-sentra\\.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },

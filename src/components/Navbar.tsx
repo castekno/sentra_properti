@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { SiteSettings } from '../types';
+import { trackWhatsAppClick } from '../lib/analytics';
 
 interface NavbarProps {
   settings: SiteSettings;
@@ -52,6 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const handleWhatsAppContact = () => {
+    trackWhatsAppClick('navbar_hotline');
     const cleanNumber = settings.whatsappNumber.replace(/[^0-9]/g, '');
     const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent('Halo Sentra Properti, saya ingin konsultasi proyek perumahan.')}`;
     window.open(url, '_blank', 'noopener,noreferrer');
